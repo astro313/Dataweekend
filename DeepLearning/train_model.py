@@ -4,7 +4,7 @@ source activate py36
 
 '''
 
-def train_mod(runName, saveModel=True, logging=True):
+def train_mod(runName, saveModel=True, exportModel=True, logging=False):
 
     import pandas as pd
     from create_model import create_mod
@@ -58,9 +58,42 @@ def train_mod(runName, saveModel=True, logging=True):
     test_error_rate = model.evaluate(X_test, Y_test, verbose=0)
     print("The mean squared error (MSE) for the test data set is: {}".format(test_error_rate))
 
-    if saveModel:
+    if saveModel:  # on disk
         model.save("trained_model.h5")
         print("Model saved to disk.")
+
+    if exportModel:
+        ''' scale up in production for large number of users '''
+
+        import tensorflow as tf
+        from keras import backend as K
+
+        model_builder = tf.saved_model.builder.SavedModelBuilder("exported_model")
+
+        inputs = {
+            'input': tf.saved_model.utils.build_tensor_info(model.input)
+        }
+        outputs = {
+            'earnings': tf.saved_model.utils.build_tensor_info(model.output)
+        }
+
+        # like func declaration
+        signature_def = tf.saved_model.signature_def_utils.build_signature_def(
+            inputs=inputs,
+            outputs=outputs,
+            method_name=tf.saved_model.signature_constants.PREDICT_METHOD_NAME
+        )
+
+        model_builder.add_meta_graph_and_variables(
+            K.get_session(),
+            tags=[tf.saved_model.tag_constants.SERVING],
+            signature_def_map={
+                tf.saved_model.signature_constants.DEFAULT_SERVING_SIGNATURE_DEF_KEY: signature_def
+            }
+        )
+
+        model_builder.save()
+
 
     return model
 
