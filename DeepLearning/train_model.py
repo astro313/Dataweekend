@@ -12,12 +12,16 @@ def train_mod(saveModel=True, logging=True):
 
     model, X, Y = create_mod()
 
+    test_data_df = pd.read_csv("sales_data_test_scaled.csv")
+    X_test = test_data_df.drop('total_earnings', axis=1).values
+    Y_test = test_data_df[['total_earnings']].values
+
     if logging:
         # Create a TensorBoard logger
         logger = keras.callbacks.TensorBoard(
             log_dir='logs',
             write_graph=True,    # log the structure of model to help visualizing the NN
-            histogram_freq=5.    # write statsitcs on how each layers is working every 5 passes
+#            histogram_freq=5.    # write statsitcs on how each layers is working every 5 passes
         )
 
         # Train the model
@@ -27,7 +31,8 @@ def train_mod(saveModel=True, logging=True):
             epochs=50,    # training passes
             shuffle=True,
             verbose=2,
-            callbacks=[logger]
+            callbacks=[logger],
+#             validation_data=(X_test, Y_test)
         )
     else:
         # Train the model
@@ -38,10 +43,6 @@ def train_mod(saveModel=True, logging=True):
             shuffle=True,
             verbose=2
         )
-
-    test_data_df = pd.read_csv("sales_data_test_scaled.csv")
-    X_test = test_data_df.drop('total_earnings', axis=1).values
-    Y_test = test_data_df[['total_earnings']].values
 
     # calculate MSE
     test_error_rate = model.evaluate(X_test, Y_test, verbose=0)
