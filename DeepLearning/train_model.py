@@ -4,7 +4,7 @@ source activate py36
 
 '''
 
-def train_mod():
+def train_mod(saveModel=True):
 
     import pandas as pd
     from create_model import create_mod
@@ -27,4 +27,9 @@ def train_mod():
     # calculate MSE
     test_error_rate = model.evaluate(X_test, Y_test, verbose=0)
     print("The mean squared error (MSE) for the test data set is: {}".format(test_error_rate))
+
+    if saveModel:
+        model.save("trained_model.h5")
+        print("Model saved to disk.")
+
     return model
