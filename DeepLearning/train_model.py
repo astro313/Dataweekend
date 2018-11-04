@@ -4,7 +4,7 @@ source activate py36
 
 '''
 
-def train_mod(saveModel=True, logging=True):
+def train_mod(runName, saveModel=True, logging=True):
 
     import pandas as pd
     from create_model import create_mod
@@ -19,7 +19,7 @@ def train_mod(saveModel=True, logging=True):
     if logging:
         # Create a TensorBoard logger
         logger = keras.callbacks.TensorBoard(
-            log_dir='logs',
+            log_dir='logs/{}'.format(runName),
             write_graph=True,    # log the structure of model to help visualizing the NN
 #            histogram_freq=5.    # write statsitcs on how each layers is working every 5 passes
         )
@@ -38,7 +38,8 @@ def train_mod(saveModel=True, logging=True):
         import webbrowser, os
 
         # to prevent cannot bind to port 6006:
-        os.system("kill -9 $(lsof -i:6006 | egrep -v 'COMMAND PID USER' | awk '{print $2}'")
+        os.system("lsof -i:6006")
+        print("Kill leftover process to prevent cannot bind to port 6006")
 
         os.system('tensorboard --logdir=logs')
         webbrowser.open("http://localhost:6006")
@@ -65,4 +66,5 @@ def train_mod(saveModel=True, logging=True):
 
 
 if __name__ == '__main__':
-    train_mod()
+    runName = "run 1 with 50 nodes"
+    train_mod(runName=runName)
