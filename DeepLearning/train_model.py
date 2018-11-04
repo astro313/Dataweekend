@@ -34,6 +34,15 @@ def train_mod(saveModel=True, logging=True):
             callbacks=[logger],
 #             validation_data=(X_test, Y_test)
         )
+
+        import webbrowser, os
+
+        # to prevent cannot bind to port 6006:
+        os.system("kill -9 $(lsof -i:6006 | egrep -v 'COMMAND PID USER' | awk '{print $2}'")
+
+        os.system('tensorboard --logdir=logs')
+        webbrowser.open("http://localhost:6006")
+
     else:
         # Train the model
         model.fit(
