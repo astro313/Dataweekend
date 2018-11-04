@@ -52,3 +52,7 @@ def train_mod(saveModel=True, logging=True):
         print("Model saved to disk.")
 
     return model
+
+
+if __name__ == '__main__':
+    train_mod()
