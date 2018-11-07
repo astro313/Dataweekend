@@ -5,21 +5,26 @@ source activate py36
 
 '''
 
-import keras
-from keras.datasets import cifar10
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
-from pathlib import Path
-
 # if I'm on rusty GPU
 import socket, os
 host = socket.gethostname()
 if 'worker' in host:
     os.system('module load cuda cudnn')
+
+    # if import complains
+    # module load cuda/9.1.85 cudnn/v7.0-cuda-9.1
+    # module load cuda/9.0.176 cudnn/v7.0-cuda-9.0
     os.environ['CUDA_VISIBLE_DEVICES'] = "0"
     from keras import backend as K
     K.tensorflow_backend._get_available_gpus()
     os.system('nvidia-smi &')
+    import pdb; pdb.set_trace()
+
+import keras
+from keras.datasets import cifar10
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
+from pathlib import Path
 
 # Load data
 # image and labels
