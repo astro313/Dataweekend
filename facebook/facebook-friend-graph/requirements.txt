@@ -1,0 +1,13 @@
+Tested on:
+Python==2.7.15
+IPython==5.8.0
+python-louvain==0.10 or 0.13
+networkx==2.2
+colorlover==0.2.1
+numpy==1.14.0 or 1.15.4
+plotly==2.5.1 or 3.4.2
+selenium==3.11.0 or 3.141.0
+community==0.13
+tqdm==4.23.0 or 4.26.0
+getpass
+
