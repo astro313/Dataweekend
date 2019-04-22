@@ -1,0 +1,7 @@
+Starting with Python 3.4, don't need to include __init__.py files to create a package. 
+A package created without __init__.py files is considered a "namespace package". 
+
+To use: 
+from the top level, simply call: (where add.py is insider mymath/)
+
+     import mymath.add
