@@ -1,3 +1,10 @@
+"""
+
+A basic REST API in Python using the flask-RESTful package. Each time a client issues a POST request to the /prediction endpoint with the appropriate request data, the Prediction class generates a prediction using a pre-trained model.
+
+"""
+
+
 import os
 
 from flask import Flask
