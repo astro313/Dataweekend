@@ -85,9 +85,13 @@ class Coronavirus():
 if __name__ == '__main__':
     bot = Coronavirus()
     df1 = bot.get_country_from_table('China')
-    df2 = bot.get_table_all_country()
+    df2 = bot.get_country_from_table('USA')
+    df3 = bot.get_table_all_country()
 
-    print(df1)
-    print(df2)
+    # save
+    from datetime import datetime
+    dt = datetime.now().strftime("%d-%m-%Y_%I-%M-%S_%p")
 
-
+    df1.to_pickle('China_' + dt + '.pkl')
+    df2.to_pickle('USA_' + dt + '.pkl')
+    df3.to_pickle('World_' + dt + '.pkl')
