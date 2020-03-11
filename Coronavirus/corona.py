@@ -16,8 +16,6 @@ class Coronavirus():
     def get_table(self):
         self.table = self.driver.find_element_by_xpath('//*[@id="main_table_countries"]/tbody')
 
-    def get_table_all_country2(self):
-        self.row = self.table.find_element_by_xpath('//*[@id="main_table_countries"]/tbody')
 
     def get_table_all_country(self):
         tab = self.table.text
@@ -35,13 +33,13 @@ class Coronavirus():
         df = df.set_index('country')
         return df
 
-    def __combine_splited_country_name(self, iii=1):
+    def __combine_splited_country_name(self):
         try:
-            float(self.data[iii])
+            float(self.data[1])
         except ValueError:
-            self.data[0] += self.data[iii]
-            self.data.remove(self.data[iii])
-            self.__combine_splited_country_name(iii)
+            self.data[0] += self.data[1]
+            self.data.remove(self.data[1])
+            self.__combine_splited_country_name(1)
 
     def get_number_per_row_from_table(self, row):
         import types
@@ -62,12 +60,7 @@ class Coronavirus():
         # if country name is split into 2 elements in the list
         # combine them
         # hopefully no country names split into 3 or more elements
-        # try:
-        #     float(self.data[1])
-        # except ValueError:
-        #     self.data[0] += self.data[1]
-        #     self.data.remove(self.data[1])
-        self.__combine_splited_country_name(iii=1)
+        self.__combine_splited_country_name())
 
         # convert numerical data into float
         try:
