@@ -116,7 +116,7 @@ plt.show(block=False)
 
 
 # predictions, using some assumed "known" figures
-days_infected_before_outcome = 18
+days_infected_before_outcome = 18          # account for death rate lages infection rate
 assumed_real_death_rate = 3.0     # percent, s.t. assumed_real_death_rate = # dead / # unknown & known infected * 100
 
 def create_inverse_growth_func(a, b, c):
