@@ -14,8 +14,8 @@ class Coronavirus():
         self.driver.get('https://www.worldometers.info/coronavirus/')
 
     def get_table(self):
-        self.table = self.driver.find_element_by_xpath('//*[@id="main_table_countries"]/tbody')
-        self.colNames = self.driver.find_element_by_xpath('//*[@id="main_table_countries"]/thead').text.split(' ')
+        self.table = self.driver.find_element_by_xpath('//*[@id="main_table_countries_today"]/tbody')
+        self.colNames = self.driver.find_element_by_xpath('//*[@id="main_table_countries_today"]/thead').text.split(' ')
         self.colNames[-3] += self.colNames[-2] + self.colNames[-1]
         self.colNames.remove(self.colNames[-2])
         self.colNames.remove(self.colNames[-1])
@@ -32,7 +32,7 @@ class Coronavirus():
             row = self.table.find_elements_by_xpath('//tr[' + rowNum + ']')
             if type(row) is list and len(row) > 1:
                 for kk in range(len(row)):
-                    if row[kk].text.split('\n') == self.driver.find_element_by_xpath('//*[@id="main_table_countries"]/thead').text.split('\n'):
+                    if row[kk].text.split('\n') == self.driver.find_element_by_xpath('//*[@id="main_table_countries_today"]/thead').text.split('\n') or len(row[kk].text) == 0:
                         # same as colhead
                         continue
                     df = self.parse_row_to_dict(row[kk], df)
