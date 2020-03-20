@@ -78,6 +78,14 @@ def create_df_for_realnum_infected(df_state):
     df_state.drop('total', axis=1, inplace=True)
     df_state.drop('dateChecked', axis=1, inplace=True)
 
+    df_state.reset_index(inplace=True)
+    try:
+        df_state.drop('index', axis=1, inplace=True)
+    except:
+        pass
+    df_state.set_index('date', inplace=True)
+
+
 
 if __name__ == '__main__':
     # get latest dataset
