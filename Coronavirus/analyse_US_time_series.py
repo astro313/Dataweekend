@@ -69,6 +69,8 @@ def create_df_for_realnum_infected(df_state):
     # dataframe updated in place
     df_state['cases'] = df_state['positive']
     df_state['active'] = df_state['positive'] - df_state['death']
+    df_state.rename(columns={'death': "deaths"}, inplace=True)
+    df_state.sort_values('date', inplace=True)
 
     df_state.drop('positive', axis=1, inplace=True)
     df_state.drop('pending', axis=1, inplace=True)
