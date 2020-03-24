@@ -5,7 +5,7 @@ import pandas as pd
 def extract_ridership_to_df(fname):
 
     # useful col from the fname file
-    relevantCols = ['UNIT', 'STATION', 'LINENAME', 'DATE', 'TIME', 'ENTRIES']
+    relevantCols = ['UNIT', 'STATION', 'LINENAME', 'DATE', 'TIME', 'DESC', 'ENTRIES']
 
     # read in chucks of same 'SCP', and keep only the first and the last row, save as dictionary w/ key "date"+"_wkstart" and "date"+"_wkend".
     ridership = {}
@@ -19,12 +19,12 @@ def extract_ridership_to_df(fname):
         if startRow is None:
             # create a key represented by UNIT, SCP, STATION name, and wkstart or wkend
             this_scp = row[1] + '_' + row[2] + '__' + row[3].replace(' ', '_').replace('/', '_')
-            ridership[this_scp + '_wkstart'] = [row[1], row[3], row[4], row[6], row[7], row[9]]
+            ridership[this_scp + '_wkstart'] = [row[1], row[3], row[4], row[6], row[7], row[8], row[9]]
         else:
             # already defined inside while loop
             # use that instead of "row"
             this_scp = startRow[1] + '_' + startRow[2] + '__' + startRow[3].replace(' ', '_').replace('/', '_')
-            ridership[this_scp + '_wkstart'] = [startRow[1], startRow[3], startRow[4], startRow[6], startRow[7], startRow[9]]
+            ridership[this_scp + '_wkstart'] = [startRow[1], startRow[3], startRow[4], startRow[6], startRow[7], startRow[8], startRow[9]]
 
         bu = []
         while not ended:
@@ -56,7 +56,7 @@ def extract_ridership_to_df(fname):
 
         if not dont_check_wkstart_wkend:
             try:
-                ridership[this_scp + '_wkend'] = [bu[-1][1], bu[-1][3], bu[-1][4], bu[-1][6], bu[-1][7], bu[-1][9]]
+                ridership[this_scp + '_wkend'] = [bu[-1][1], bu[-1][3], bu[-1][4], bu[-1][6], bu[-1][7], bu[-1][8], bu[-1][9]]
             except:
                 import pdb; pdb.set_trace()
 
@@ -74,8 +74,14 @@ def extract_ridership_to_df(fname):
                 ridership.pop(this_scp + '_wkstart')
                 ridership.pop(this_scp + '_wkend')
 
+            # remove_irregular_event
+            elif ridership[this_scp + '_wkstart'][-2] != 'REGULAR' or ridership[this_scp + '_wkend'][-2] != 'REGULAR':
+                ridership.pop(this_scp + '_wkstart')
+                ridership.pop(this_scp + '_wkend')
+
         if dont_check_wkstart_wkend:
             ridership.pop(this_scp + '_wkstart')
+
 
         ended = 0
         if len(ridership) % 2:
@@ -120,7 +126,7 @@ if __name__ == '__main__':
         total_df[date] = get_delta_entrance(df)
     total_df = pd.DataFrame([total_df])
     total_df = total_df.T
-    total_df.columns = ['Total_entrance'])
+    total_df.columns = ['Total_entrance']
 
     import matplotlib.pyplot as plt
     fig, ax1 = plt.subplots()
