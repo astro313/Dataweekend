@@ -110,17 +110,28 @@ def get_delta_entrance(df):
 if __name__ == '__main__':
     listofFiles = ['turnstile_200104.txt', 'turnstile_200111.txt', 'turnstile_200125.txt', 'turnstile_200201.txt', 'turnstile_200208.txt', 'turnstile_200215.txt', 'turnstile_200222.txt', 'turnstile_200229.txt', 'turnstile_200307.txt', 'turnstile_200314.txt', 'turnstile_200321.txt']
 
+    import matplotlib.dates as mdates
+
     total_df = {}
     for fff in listofFiles:
         date = fff[fff.find('_')+3: fff.find('.')]
         # print(date)
         df = extract_ridership_to_df(fff)
         total_df[date] = get_delta_entrance(df)
-    # total_df = pd.DataFrame(total_df, columns=['Total_entrance'])
+    total_df = pd.DataFrame([total_df])
+    total_df = total_df.T
+    total_df.columns = ['Total_entrance'])
 
     import matplotlib.pyplot as plt
-    plt.figure()
-    plt.plot(total_df)
+    fig, ax1 = plt.subplots()
+    fig.subplots_adjust(left=0.25, bottom=0.25)
+    plt.plot(total_df/1.e6)
+    plt.ylabel(r'times 10$^6$')
+    plt.xlabel('Dates')
+    # monthyearFmt = mdates.DateFormatter('%m%d')
+    # ax1.xaxis.set_major_formatter(monthyearFmt)
+    _ = plt.xticks(rotation=90)
+
     plt.show()
 
 
